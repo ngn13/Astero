@@ -9,7 +9,7 @@ CHEAT = False
 r = requests.get('https://raw.githubusercontent.com/ngn13/Astero/main/game/game.py')
 with open('game.py', 'r') as f:
     fc = f.read()
-    if not fc == r.content:
+    if not fc == r.text:
         CHEAT = True
         
 
