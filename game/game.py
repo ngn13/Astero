@@ -1,13 +1,26 @@
 import pygame
 import time
+import requests
 import random
 pygame.font.init()
 
+CHEAT = False
+
+r = requests.get('https://raw.githubusercontent.com/ngn13/Astero/main/game/game.py')
+with open('game.py', 'r') as f:
+    fc = f.read()
+    if not fc == r.content:
+        CHEAT = True
+        
+
 WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+SHOOTER_IMAGE1 = pygame.image.load('assests/shooter.png')
+pygame.display.set_icon(SHOOTER_IMAGE1)
 pygame.display.set_caption('Astero / Github - ngn13')
 
 WINNER_FONT = pygame.font.SysFont('comicsans', 100)
+CHEATER_FONT = pygame.font.SysFont('comicsans', 50)
 
 WHITE = (255, 255, 255)
 BLUE = (0, 100, 255)
@@ -30,7 +43,6 @@ MOVE = 5
 
 HIT = pygame.USEREVENT + 1
 
-SHOOTER_IMAGE1 = pygame.image.load('assests/shooter.png')
 SHOOTER = pygame.transform.scale(SHOOTER_IMAGE1, (50, 50))
 ROCK_IMAGE = pygame.image.load('assests/rock.png')
 ROCK = pygame.transform.scale(ROCK_IMAGE, (20, 20))
@@ -83,14 +95,45 @@ def move(key_pressed, sh):
         
     elif key_pressed[pygame.K_s] and not sh.y > HEIGHT - 120:
         sh.y += MOVE
-    
+
+def cheat():
+    while True:
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    RUN = False
+                    pygame.quit()
+        WIN.fill((255, 0, 0))
+        draw_text = WINNER_FONT.render('Ops!', 1, WHITE)
+        WIN.blit(draw_text, (200,100))
+        draw_text2 = CHEATER_FONT.render('Seems like your cheating!', 1, WHITE)
+        WIN.blit(draw_text2, (200,200))
+        draw_text2 = CHEATER_FONT.render('ERROR: Looser cheater detected', 1, WHITE)
+        WIN.blit(draw_text2, (200,270))
+        pygame.display.update()
+
 def hs():
     WIN.blit(BACK, (0, 0))
     draw_text = WINNER_FONT.render('High Score: ' + str(HIGH_SCORE), 1, WHITE)
     WIN.blit(draw_text, (WIDTH/2 - draw_text.get_width() /
                          2, HEIGHT/2 - draw_text.get_height()/2))
     pygame.display.update()
-    time.sleep(3)
+    time.sleep(1 / 5)
+    WIN.blit(BACK, (0, 0))
+    pygame.display.update()
+    time.sleep(1 / 5)
+    draw_text = WINNER_FONT.render('High Score: ' + str(HIGH_SCORE), 1, WHITE)
+    WIN.blit(draw_text, (WIDTH/2 - draw_text.get_width() /
+                         2, HEIGHT/2 - draw_text.get_height()/2))
+    pygame.display.update()
+    time.sleep(1 / 5)
+    WIN.blit(BACK, (0, 0))
+    pygame.display.update()
+    time.sleep(1/ 5)
+    draw_text = WINNER_FONT.render('High Score: ' + str(HIGH_SCORE), 1, WHITE)
+    WIN.blit(draw_text, (WIDTH/2 - draw_text.get_width() /
+                         2, HEIGHT/2 - draw_text.get_height()/2))
+    pygame.display.update()
+    time.sleep(2)
     main()
 
 def game_over(text):
@@ -163,6 +206,8 @@ def main():
     clock = pygame.time.Clock()
     RUN = True
     first = 1
+    if CHEAT:
+        cheat()
     while RUN:
         clock.tick(FPS)
         for event in pygame.event.get():
