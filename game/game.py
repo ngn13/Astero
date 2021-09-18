@@ -7,12 +7,14 @@ pygame.font.init()
 
 CHEAT = False
 
-r = requests.get('https://raw.githubusercontent.com/ngn13/Astero/main/game/game.py')
-with open(sys.argv[0], 'r') as f:
-    fc = f.read()
-    if not fc == r.text:
-        CHEAT = True
-        
+try:
+    r = requests.get('https://raw.githubusercontent.com/ngn13/Astero/main/game/game.py')
+    with open(sys.argv[0], 'r') as f:
+        fc = f.read()
+        if not fc == r.text:
+            CHEAT = True
+except:
+    pass
 
 WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
