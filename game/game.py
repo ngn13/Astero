@@ -8,7 +8,7 @@ pygame.font.init()
 CHEAT = False
 
 r = requests.get('https://raw.githubusercontent.com/ngn13/Astero/main/game/game.py')
-with open('sys.argv[0]', 'r') as f:
+with open(sys.argv[0], 'r') as f:
     fc = f.read()
     if not fc == r.text:
         CHEAT = True
